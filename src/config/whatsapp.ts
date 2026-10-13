@@ -1,12 +1,25 @@
+import { Client, LocalAuth } from "whatsapp-web.js";
+import qrcode from "qrcode-terminal";
 
-import { Client, LocalAuth } from 'whatsapp-web.js';
-import qrcode from 'qrcode-terminal';
+// CONFIG
 
-const client = new Client({
+export const client = new Client({
     authStrategy: new LocalAuth(),
 });
 
 let isReady = false;
+
+// UTILS
+
+export function initializeWhatsApp(): void {
+    client.initialize();
+};
+
+export function isWhatsAppReady(): boolean {
+    return isReady;
+};
+
+// LISTENERS
 
 client.on("qr", (qr: string) => {
     qrcode.generate(qr, { small: true });
@@ -27,17 +40,3 @@ client.on("disconnected", (reason: string) => {
     isReady = false;
     console.log("WhatsApp desconectado: ", reason);
 });
-
-function initializeWhatsApp(): void {
-    client.initialize();
-};
-
-function isWhatsAppReady(): boolean {
-    return isReady;
-};
-
-export {
-    client,
-    initializeWhatsApp,
-    isWhatsAppReady,
-};
