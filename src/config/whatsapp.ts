@@ -1,5 +1,7 @@
-import { Client, LocalAuth } from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
+import whatsapp from 'whatsapp-web.js';
+
+const { Client, LocalAuth } = whatsapp;
 
 // CONFIG
 
@@ -11,11 +13,11 @@ let isReady = false;
 
 // UTILS
 
-export function initializeWhatsApp(): void {
+export function initializeWhatsApp() {
     client.initialize();
 };
 
-export function isWhatsAppReady(): boolean {
+export function isWhatsAppReady() {
     return isReady;
 };
 

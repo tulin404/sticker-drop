@@ -169,6 +169,9 @@ importers:
       axios:
         specifier: ^1.20.0
         version: 1.20.0(debug@4.4.3)
+      dotenv:
+        specifier: ^18.0.7
+        version: 18.0.7
       express:
         specifier: ^5.3.0
         version: 5.3.0
@@ -775,6 +778,11 @@ packages:
 
   devtools-protocol@0.0.1581282:
     resolution: {integrity: sha512-nv7iKtNZQshSW2hKzYNr46nM/Cfh5SEvE2oV0/SEGgc9XupIY5ggf84Cz8eJIkBce7S3bmTAauFD6aysMpnqsQ==}
+
+  dotenv@18.0.7:
+    resolution: {integrity: sha512-QEvMEF8ca3GNZJJnAbOgxpj5ULhBvnMcURp+XKrtvqFNPgjBvYoswQ0Jl2cO7JzCjxZjJhr9ZuIEhlrRxMft/Q==}
+    engines: {node: '>=12'}
+    hasBin: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -1971,6 +1979,8 @@ snapshots:
   depd@2.0.0: {}
 
   devtools-protocol@0.0.1581282: {}
+
+  dotenv@18.0.7: {}
 
   dunder-proto@1.0.1:
     dependencies:

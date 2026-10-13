@@ -1,5 +1,7 @@
-import { MessageMedia } from "whatsapp-web.js";
+import whatsapp from "whatsapp-web.js";
 import { client, isWhatsAppReady } from "../config/whatsapp";
+
+const { MessageMedia } = whatsapp;
 
 export async function sendSticker({
     number,
@@ -7,12 +9,12 @@ export async function sendSticker({
 }: {
     number: string,
     imageUrl: string,
-}): Promise<void> {
+}) {
     if (!isWhatsAppReady()) {
         throw new Error('WhatsApp não está conectado.');
     };
 
-    const chatId = `${number.replace(/\D/g, '')}@c.us`;
+    const chatId = `${number.replace(/\D/g, "")}@c.us`;
 
     const media = await MessageMedia.fromUrl(imageUrl);
 
