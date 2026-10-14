@@ -5,18 +5,18 @@ const { MessageMedia } = whatsapp;
 
 export async function sendSticker({
     number,
-    imageUrl,
+    imgUrl,
 }: {
     number: string,
-    imageUrl: string,
+    imgUrl: string,
 }) {
     if (!isWhatsAppReady()) {
-        throw new Error('WhatsApp não está conectado.');
+        throw new Error("WhatsApp não está conectado.");
     };
 
     const chatId = `${number.replace(/\D/g, "")}@c.us`;
 
-    const media = await MessageMedia.fromUrl(imageUrl);
+    const media = await MessageMedia.fromUrl(imgUrl);
 
     await client.sendMessage(chatId, media, {
         sendMediaAsSticker: true,
