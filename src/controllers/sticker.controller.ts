@@ -1,30 +1,55 @@
 import type { Request, Response } from "express";
-import { getTikTokImage } from "../services/tiktok.service";
+import { getTikTokStickers } from "../services/tiktok.service";
 import { sendSticker } from "../services/whatsapp.service";
 
-export async function sendStickerController(req: Request, res: Response) {
-    try {
-        const { number, linkTiktok } = req.body;
+export class StickerController {
 
-        if (!number || !linkTiktok) {
-            res.status(400).json({
-                error: "Número e link do TikTok são obrigatórios.",
+    static async generate(req: Request, res: Response) {
+        try {
+            const { videoUrl } = req.body;
+
+            if (!videoUrl) {
+                return res.status(400).json({
+                    error: "Link do vídeo é obrigatório.",
+                });
+            };
+
+            const stickers = await getTikTokStickers(videoUrl);
+
+            return res.status(200).json({
+                stickers,
+                message: "Stickers gerados com sucesso."
             });
-            return;
+        } catch (error) {
+            console.error(`Erro ao gerar figurinhas: ${error}`);
+
+            return res.status(500).json({
+                error: error instanceof Error ? error.message : "Erro interno do servidor.",
+            });
         };
+    };
 
-        const imageUrl = await getTikTokImage(linkTiktok);
+    static async send(req: Request, res: Response) {
+        try {
+            const { number, imgUrl } = req.body;
 
-        await sendSticker({ number, imageUrl });
+            if (!number || !imgUrl) {
+                return res.status(400).json({
+                    error: "Número e link da imagem são obrigatórios.",
+                });
+            };
 
-        res.status(200).json({
-            message: "Figurinha enviada com sucesso.",
-        });
-    } catch (error) {
-        console.error(error);
+            await sendSticker({ number, imgUrl });
 
-        res.status(500).json({
-            error: error instanceof Error ? error.message : "Erro interno do servidor.",
-        });
+            res.status(200).json({
+                message: "Figurinha enviada com sucesso.",
+            });
+        } catch (error) {
+            console.error(`Erro ao enviar figurinha: ${error}`);
+
+            return res.status(500).json({
+                error: error instanceof Error ? error.message : "Erro interno do servidor.",
+            });
+        };
     };
 };
