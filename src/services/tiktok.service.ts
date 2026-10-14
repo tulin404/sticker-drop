@@ -1,22 +1,22 @@
 import axios from "axios";
 
-export async function getTikTokImage(linkTiktok: string): Promise<string> {
-    const response = await axios.get(
-        "https://www.tikwm.com/api/",
+export async function getTikTokStickers(videoUrl: string): Promise<string> {
+    const response = await axios.post(
+        "https://zocialcomment.com/api/stickers/scan",
         {
-            params: {
-                url: linkTiktok,
-            },
-            timeout: 15000,
+            url: videoUrl,
+        },
+        {
+            timeout: 30000,
         },
     );
 
-    const data = response.data?.data;
-    const imageUrl = data?.cover || data?.avatar;
-
-    if (!imageUrl) {
-        throw new Error("Não foi possível encontrar uma imagem.");
+    const data = response.data?.data.pictures;
+    if (data.lenght === 0) {
+        throw new Error("Não foi possível encontrar imagens.");
     };
 
-    return imageUrl;
+    console.log(data);
+
+    return data;
 };
