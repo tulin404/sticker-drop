@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f7f8" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236d4aff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M21%209a2.4%202.4%200%200%200-.706-1.706l-3.588-3.588A2.4%202.4%200%200%200%2015%203H5a2%202%200%200%200-2%202v14a2%202%200%200%200%202%202h14a2%202%200%200%200%202-2z%22%2F%3E%3Cpath%20d%3D%22M15%203v5a1%201%200%200%200%201%201h5%22%2F%3E%3Cpath%20d%3D%22M8%2013h.01%22%2F%3E%3Cpath%20d%3D%22M16%2013h.01%22%2F%3E%3Cpath%20d%3D%22M10%2016s.8%201%202%201c1.3%200%202-1%202-1%22%2F%3E%3C%2Fsvg%3E" />
+  <script>
+    try {
+      const savedTheme = localStorage.getItem('sticker-drop-theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') document.documentElement.dataset.theme = savedTheme;
+    } catch { /* A preferência de tema é opcional. */ }
+  </script>
+  <title>Sticker Drop</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --text: #19191d;
+      --muted: #777781;
+      --line: #e8e8ed;
+      --accent: #6d4aff;
+      --accent-hover: #5a39e6;
+      --accent-soft: #f0ecff;
+      --success: #18794e;
+      --success-bg: #eaf8f0;
+      --danger: #b42318;
+      --danger-bg: #fff0ef;
+      --shadow: 0 12px 36px rgba(25, 25, 40, .055);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at top left, #f0ecff 0, transparent 34rem), var(--bg);
+      color: var(--text);
+    }
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    .shell { width: min(100% - 32px, 1040px); margin: 0 auto; padding: 34px 0 56px; }
+    .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+    .brand-mark {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px;
+      color: white; background: var(--accent); box-shadow: 0 7px 18px rgba(109, 74, 255, .25);
+    }
+    .brand-name { font-size: 16px; font-weight: 750; letter-spacing: -.035em; }
+    .brand-caption { margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .hero { max-width: 700px; margin: 0 auto 34px; text-align: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border: 1px solid #e1d9ff;
+      border-radius: 999px; color: #5e42dc; background: rgba(255,255,255,.72); font-size: 12px; font-weight: 650;
+    }
+    h1 { margin: 18px 0 12px; font-size: clamp(32px, 5vw, 48px); line-height: 1.07; letter-spacing: -.06em; }
+    .hero p { max-width: 510px; margin: 0 auto; color: var(--muted); font-size: 15px; line-height: 1.7; }
+    .panel { background: var(--surface); border: 1px solid rgba(229,229,237,.9); border-radius: 22px; box-shadow: var(--shadow); }
+    .form-panel { max-width: 760px; margin: 0 auto; padding: clamp(20px, 4vw, 30px); }
+    .panel-heading { margin: 0 0 22px; font-size: 16px; font-weight: 720; letter-spacing: -.025em; }
+    .fields { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr); gap: 16px; }
+    .field { min-width: 0; }
+    label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 650; }
+    .input-wrap { position: relative; }
+    .input-icon { position: absolute; top: 50%; left: 13px; transform: translateY(-50%); color: #92929d; pointer-events: none; }
+    input {
+      width: 100%; height: 48px; padding: 0 14px 0 42px; border: 1px solid #dedee6; border-radius: 12px;
+      outline: none; color: var(--text); background: #fff; transition: border-color .16s, box-shadow .16s;
+    }
+    input::placeholder { color: #a0a0aa; }
+    input:focus { border-color: #9c89ff; box-shadow: 0 0 0 4px rgba(109, 74, 255, .11); }
+    .field-hint { margin: 7px 0 0; color: #8a8a95; font-size: 11px; line-height: 1.45; }
+    .form-actions { display: flex; align-items: center; gap: 14px; margin-top: 23px; }
+    .primary-btn {
+      display: inline-flex; min-height: 47px; align-items: center; justify-content: center; gap: 9px;
+      padding: 0 19px; border: 0; border-radius: 12px; color: #fff; background: var(--accent);
+      font-weight: 700; cursor: pointer; box-shadow: 0 5px 12px rgba(109,74,255,.18); transition: background .16s, transform .16s, opacity .16s;
+    }
+    .primary-btn:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+    .primary-btn:disabled { cursor: wait; opacity: .72; }
+    .form-note { color: var(--muted); font-size: 12px; }
+    .notice { display: none; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+    .notice.visible { display: flex; }
+    .notice.info { color: #4935a5; background: #f2efff; }
+    .notice.success { color: var(--success); background: var(--success-bg); }
+    .notice.error { color: var(--danger); background: var(--danger-bg); }
+    .results { margin-top: 42px; }
+    .results-head { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .results-title { margin: 0; font-size: 22px; letter-spacing: -.045em; }
+    .results-subtitle { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .count { padding: 6px 10px; border-radius: 999px; background: #eeebff; color: #5e42dc; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .sticker-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .sticker-card {
+      display: flex; min-width: 0; flex-direction: column; padding: 12px; text-align: left; color: var(--text);
+      border: 1px solid var(--line); border-radius: 17px; background: var(--surface); cursor: pointer;
+      transition: border-color .16s, box-shadow .16s, transform .16s;
+    }
+    .sticker-card:hover:not(:disabled) { transform: translateY(-2px); border-color: #c9bcff; box-shadow: 0 9px 24px rgba(38, 25, 90, .08); }
+    .sticker-card:focus-visible { outline: 3px solid rgba(109,74,255,.35); outline-offset: 2px; }
+    .sticker-card:disabled { cursor: wait; opacity: .8; }
+    .sticker-preview { display: grid; place-items: center; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 11px; background: #f6f6f9; }
+    .sticker-preview img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .preview-placeholder { color: #a5a5af; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 2px 1px; }
+    .card-title { min-width: 0; font-size: 12px; font-weight: 700; }
+    .send-label { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 11px; font-weight: 750; white-space: nowrap; }
+    .sticker-card[data-state="success"] { border-color: #a9dfc0; background: #fbfffc; }
+    .sticker-card[data-state="success"] .send-label { color: var(--success); }
+    .sticker-card[data-state="error"] { border-color: #f2b8b5; }
+    .sticker-card[data-state="error"] .send-label { color: var(--danger); }
+    .empty-state { padding: 36px 20px; text-align: center; border: 1px dashed #dcdce5; border-radius: 18px; color: var(--muted); background: rgba(255,255,255,.58); }
+    .empty-icon { display: grid; place-items: center; width: 46px; height: 46px; margin: 0 auto 12px; border-radius: 15px; color: var(--accent); background: var(--accent-soft); }
+    .empty-state strong { display: block; margin-bottom: 5px; color: var(--text); font-size: 14px; }
+    .empty-state span { font-size: 12px; line-height: 1.6; }
+    .hidden { display: none !important; }
+    .spinner { width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+    .spinner.small { width: 12px; height: 12px; border-width: 2px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    footer { margin-top: 42px; color: #9696a0; text-align: center; font-size: 11px; }
+    .brand-copy { min-width: 0; }
+    .theme-toggle {
+      display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 8px;
+      min-height: 40px; margin-left: auto; padding: 0 12px; border: 1px solid var(--line); border-radius: 12px;
+      color: var(--text); background: var(--surface); cursor: pointer; font-size: 12px; font-weight: 650;
+      transition: border-color .16s, background .16s, transform .16s;
+    }
+    .theme-toggle:hover { border-color: #c9bcff; background: var(--accent-soft); }
+    .theme-toggle:active { transform: scale(.98); }
+    .theme-toggle:focus-visible { outline: 3px solid rgba(109,74,255,.35); outline-offset: 2px; }
+    .theme-toggle svg { display: block; flex-shrink: 0; }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141419;
+      --surface: #1d1d25;
+      --text: #f2f2f7;
+      --muted: #aaaab8;
+      --line: #343440;
+      --accent: #8d78ff;
+      --accent-hover: #a18fff;
+      --accent-soft: #2a2543;
+      --success: #68d59c;
+      --success-bg: #183126;
+      --danger: #ff8d86;
+      --danger-bg: #3a2022;
+      --shadow: 0 12px 36px rgba(0, 0, 0, .22);
+    }
+    :root[data-theme="dark"] body {
+      background: radial-gradient(ellipse at top left, rgba(109,74,255,.15) 0, transparent 34rem), var(--bg);
+    }
+    :root[data-theme="dark"] .eyebrow {
+      border-color: #3e355d; color: #c5baff; background: rgba(36,32,51,.82);
+    }
+    :root[data-theme="dark"] .panel { border-color: #30303a; }
+    :root[data-theme="dark"] input {
+      border-color: #3c3c49; background: #25252f;
+    }
+    :root[data-theme="dark"] input::placeholder,
+    :root[data-theme="dark"] .input-icon,
+    :root[data-theme="dark"] .field-hint { color: #9292a2; }
+    :root[data-theme="dark"] .notice.info { color: #c7bdff; background: #282340; }
+    :root[data-theme="dark"] .count { color: #c5baff; background: #2a2543; }
+    :root[data-theme="dark"] .sticker-card:hover:not(:disabled) {
+      border-color: #5b4c91; box-shadow: 0 9px 24px rgba(0, 0, 0, .2);
+    }
+    :root[data-theme="dark"] .sticker-preview { background: #262630; }
+    :root[data-theme="dark"] .sticker-card[data-state="success"] {
+      border-color: #32694d; background: #1a2922;
+    }
+    :root[data-theme="dark"] .sticker-card[data-state="error"] { border-color: #75403f; }
+    :root[data-theme="dark"] .empty-state {
+      border-color: #393944; background: rgba(29,29,37,.72);
+    }
+    :root[data-theme="dark"] footer { color: #888896; }
+    :root[data-theme="dark"] .theme-toggle:hover { border-color: #5b4c91; }
+
+    @media (max-width: 760px) {
+      .shell { padding-top: 22px; }
+      .topbar { margin-bottom: 37px; }
+      .fields { grid-template-columns: 1fr; gap: 18px; }
+      .sticker-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .hero p { font-size: 14px; }
+    }
+    @media (max-width: 480px) {
+      .shell { width: min(100% - 22px, 1040px); padding-top: 17px; }
+      .theme-toggle { width: 40px; min-width: 40px; padding: 0; }
+      .theme-toggle .theme-label { display: none; }
+      .hero { margin-bottom: 25px; }
+      h1 { font-size: 35px; }
+      .form-panel { padding: 18px; border-radius: 18px; }
+      .form-actions { align-items: stretch; flex-direction: column; }
+      .primary-btn { width: 100%; }
+      .form-note { text-align: center; }
+      .sticker-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .sticker-card { padding: 9px; }
+      .results-head { align-items: start; }
+      .results-title { font-size: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar" aria-label="Sticker Drop">
+      <div class="brand-mark" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticker preview-icon"><path d="M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/><path d="M15 3v5a1 1 0 0 0 1 1h5"/><path d="M8 13h.01"/><path d="M16 13h.01"/><path d="M10 16s.8 1 2 1c1.3 0 2-1 2-1"/></svg>
+      </div>
+      <div class="brand-copy"><div class="brand-name">Sticker Drop</div><div class="brand-caption">Do vídeo à conversa, em poucos cliques.</div></div>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Ativar tema escuro" aria-pressed="false" title="Ativar tema escuro">
+        <svg class="theme-toggle-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"/></svg>
+        <span class="theme-label">Tema escuro</span>
+      </button>
+    </header>
+
+    <section class="hero">
+      <span class="eyebrow"><span aria-hidden="true">✦</span> STICKERS EM POUCOS CLIQUES</span>
+      <h1>Transforme vídeos<br />em figurinhas.</h1>
+      <p>Cole o link do vídeo, informe o número de destino e escolha quais figurinhas enviar.</p>
+    </section>
+
+    <section class="panel form-panel" aria-labelledby="form-title">
+      <h2 class="panel-heading" id="form-title">Começar por um vídeo</h2>
+      <form id="generate-form">
+        <div class="fields">
+          <div class="field">
+            <label for="video-url">Link do vídeo</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M10 13.5a4 4 0 0 0 5.66 0l3-3A4 4 0 0 0 13 4.84l-1.72 1.72M14 10.5a4 4 0 0 0-5.66 0l-3 3A4 4 0 0 0 11 19.16l1.72-1.72" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+              <input id="video-url" name="videoUrl" type="url" placeholder="https://..." autocomplete="url" required />
+            </div>
+            <p class="field-hint">Cole a URL pública do vídeo que deseja converter.</p>
+          </div>
+          <div class="field">
+            <label for="phone-number">Número de destino</label>
+            <div class="input-wrap">
+              <span class="input-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.2 3.75h9.6A2.45 2.45 0 0 1 19.25 6.2v11.6a2.45 2.45 0 0 1-2.45 2.45H7.2a2.45 2.45 0 0 1-2.45-2.45V6.2A2.45 2.45 0 0 1 7.2 3.75Z" stroke="currentColor" stroke-width="1.7"/><path d="M10 17.1h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+              <input id="phone-number" name="phoneNumber" type="tel" placeholder="5511999999999" autocomplete="tel" inputmode="tel" pattern="[0-9+() .-]{8,24}" required />
+            </div>
+            <p class="field-hint">Inclua o código do país e o DDD, se necessário.</p>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="primary-btn" id="generate-button" type="submit">
+            <svg class="button-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 1.95 5.95L20 11l-6.05 2.05L12 19l-1.95-5.95L4 11l6.05-2.05L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m19 15 1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15Z" fill="currentColor"/></svg>
+            <span>Gerar figurinhas</span>
+          </button>
+          <span class="form-note">Você escolhe uma por vez para enviar.</span>
+        </div>
+        <div id="form-notice" class="notice" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="results" aria-labelledby="results-title">
+      <div class="results-head">
+        <div><h2 id="results-title" class="results-title">Suas figurinhas</h2><p id="results-subtitle" class="results-subtitle">As figurinhas geradas aparecerão aqui.</p></div>
+        <span id="sticker-count" class="count hidden">0 figurinhas</span>
+      </div>
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="1.7"/><path d="M8 14.5 10.5 12l2 2 3.5-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <strong>Nenhuma figurinha por enquanto</strong>
+        <span>Preencha os campos acima e clique em “Gerar figurinhas” para começar.</span>
+      </div>
+      <div id="sticker-grid" class="sticker-grid" aria-live="polite"></div>
+    </section>
+    <footer>Sticker Drop · Envie somente para números com autorização do destinatário.</footer>
+  </main>
+
+  <script>
+    const GENERATE_ENDPOINT = '/api/sticker/generate';
+    const SEND_ENDPOINT = '/api/sticker/send';
+
+    const form = document.querySelector('#generate-form');
+    const videoInput = document.querySelector('#video-url');
+    const phoneInput = document.querySelector('#phone-number');
+    const generateButton = document.querySelector('#generate-button');
+    const formNotice = document.querySelector('#form-notice');
+    const grid = document.querySelector('#sticker-grid');
+    const emptyState = document.querySelector('#empty-state');
+    const subtitle = document.querySelector('#results-subtitle');
+    const countBadge = document.querySelector('#sticker-count');
+    const themeToggle = document.querySelector('#theme-toggle');
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      themeToggle.setAttribute('aria-pressed', String(isDark));
+      themeToggle.setAttribute('aria-label', isDark ? 'Ativar tema claro' : 'Ativar tema escuro');
+      themeToggle.title = isDark ? 'Ativar tema claro' : 'Ativar tema escuro';
+      themeToggle.querySelector('.theme-label').textContent = isDark ? 'Tema claro' : 'Tema escuro';
+      themeToggle.querySelector('.theme-toggle-icon').innerHTML = isDark
+        ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>'
+        : '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.463.402.807a6.5 6.5 0 0 0 8.268 8.268c.344-.215.829-.003.803.397Z"/>';
+      themeMeta.setAttribute('content', isDark ? '#141419' : '#f7f7f8');
+    }
+
+    applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      try { localStorage.setItem('sticker-drop-theme', nextTheme); } catch { /* O tema continua funcional sem armazenamento. */ }
+    });
+
+    function showNotice(element, message, type = 'info') {
+      element.className = `notice visible ${type}`;
+      element.replaceChildren(document.createTextNode(message));
+    }
+
+    function hideNotice(element) {
+      element.className = 'notice';
+      element.textContent = '';
+    }
+
+    async function readResponse(response) {
+      const contentType = response.headers.get('content-type') || '';
+      const payload = contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
+
+      if (!response.ok) {
+        const message = payload && typeof payload === 'object'
+          ? (payload.message || payload.error || payload.detail)
+          : payload;
+        throw new Error(message || `A requisição falhou (HTTP ${response.status}).`);
+      }
+      return payload;
+    }
+
+    // Aceita um array de URLs ou um array dentro de propriedades comuns de uma resposta JSON.
+    function extractStickerUrls(payload) {
+      let items = payload;
+      if (!Array.isArray(items) && items && typeof items === 'object') {
+        items = items.stickers ?? items.urls ?? items.data?.stickers ?? items.data?.urls ?? items.data;
+      }
+      if (!Array.isArray(items)) {
+        throw new Error('A API não retornou uma lista de figurinhas. Verifique o formato da resposta de /generate.');
+      }
+
+      return items.map((item) => {
+        if (typeof item === 'string') return item;
+        if (item && typeof item === 'object') return item.url ?? item.mediaUrl ?? item.media_url ?? item.src;
+        return null;
+      }).filter((url) => typeof url === 'string' && url.length > 0);
+    }
+
+    function setGenerateLoading(isLoading) {
+      generateButton.disabled = isLoading;
+      generateButton.innerHTML = isLoading
+        ? '<span class="spinner" aria-hidden="true"></span><span>Gerando...</span>'
+        : '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 1.95 5.95L20 11l-6.05 2.05L12 19l-1.95-5.95L4 11l6.05-2.05L12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m19 15 1.1 2.9L23 19l-2.9 1.1L19 23l-1.1-2.9L15 19l2.9-1.1L19 15Z" fill="currentColor"/></svg><span>Gerar figurinhas</span>';
+    }
+
+    function createStickerCard(url, index, phoneNumber) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'sticker-card';
+      button.dataset.state = 'idle';
+      button.setAttribute('aria-label', `Enviar figurinha ${index + 1}`);
+
+      const preview = document.createElement('span');
+      preview.className = 'sticker-preview';
+      preview.setAttribute('aria-hidden', 'true');
+      const image = document.createElement('img');
+      image.src = url;
+      image.alt = '';
+      image.loading = 'lazy';
+      image.onerror = () => {
+        image.remove();
+        const placeholder = document.createElement('span');
+        placeholder.className = 'preview-placeholder';
+        placeholder.textContent = 'Prévia indisponível';
+        preview.append(placeholder);
+      };
+      preview.append(image);
+
+      const footer = document.createElement('span');
+      footer.className = 'card-footer';
+      const title = document.createElement('span');
+      title.className = 'card-title';
+      title.textContent = `Figurinha ${String(index + 1).padStart(2, '0')}`;
+      const status = document.createElement('span');
+      status.className = 'send-label';
+      status.innerHTML = '<span aria-hidden="true">↗</span><span>Enviar</span>';
+      footer.append(title, status);
+      button.append(preview, footer);
+
+      button.addEventListener('click', async () => {
+        if (button.disabled) return;
+        button.disabled = true;
+        button.dataset.state = 'loading';
+        status.innerHTML = '<span class="spinner small" aria-hidden="true"></span><span>Enviando</span>';
+        try {
+          await readResponse(await fetch(SEND_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ number: phoneNumber, imgUrl: url })
+          }));
+          button.dataset.state = 'success';
+          status.innerHTML = '<span aria-hidden="true">✓</span><span>Enviada</span>';
+          showNotice(formNotice, `Figurinha ${index + 1} enviada com sucesso.`, 'success');
+        } catch (error) {
+          button.dataset.state = 'error';
+          status.innerHTML = '<span aria-hidden="true">!</span><span>Falhou · tentar</span>';
+          showNotice(formNotice, `Não foi possível enviar a figurinha ${index + 1}: ${error.message}`, 'error');
+        } finally {
+          button.disabled = false;
+        }
+      });
+      return button;
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const videoUrl = videoInput.value.trim();
+      const phoneNumber = phoneInput.value.trim();
+      hideNotice(formNotice);
+      setGenerateLoading(true);
+      grid.replaceChildren();
+      emptyState.classList.add('hidden');
+      countBadge.classList.add('hidden');
+      subtitle.textContent = 'Gerando as figurinhas. Isso pode levar alguns instantes...';
+
+      try {
+        const payload = await readResponse(await fetch(GENERATE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ videoUrl })
+        }));
+        const urls = extractStickerUrls(payload);
+        if (urls.length === 0) {
+          emptyState.classList.remove('hidden');
+          emptyState.querySelector('strong').textContent = 'Nenhuma figurinha encontrada';
+          emptyState.querySelector('span:last-child').textContent = 'A API concluiu a solicitação, mas não retornou URLs de mídia.';
+          subtitle.textContent = 'Não há figurinhas para exibir.';
+          showNotice(formNotice, 'A geração terminou, mas nenhuma URL de figurinha foi retornada.', 'error');
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        urls.forEach((url, index) => fragment.append(createStickerCard(url, index, phoneNumber)));
+        grid.append(fragment);
+        countBadge.textContent = `${urls.length} ${urls.length === 1 ? 'figurinha' : 'figurinhas'}`;
+        countBadge.classList.remove('hidden');
+        subtitle.textContent = 'Clique em uma figurinha para enviá-la ao número informado.';
+        showNotice(formNotice, `${urls.length} ${urls.length === 1 ? 'figurinha foi gerada' : 'figurinhas foram geradas'}. Escolha quais deseja enviar.`, 'success');
+      } catch (error) {
+        emptyState.classList.remove('hidden');
+        emptyState.querySelector('strong').textContent = 'Não foi possível gerar as figurinhas';
+        emptyState.querySelector('span:last-child').textContent = 'Confira o link e tente novamente.';
+        subtitle.textContent = 'A geração não foi concluída.';
+        showNotice(formNotice, `Erro ao gerar figurinhas: ${error.message}`, 'error');
+      } finally {
+        setGenerateLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
