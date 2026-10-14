@@ -1,10 +1,10 @@
-# TikTok Sticker Bot 🚀📱
+# Sticker Drop 📱
 
 > Uma solução automatizada em TypeScript para extração de mídias do TikTok e conversão direta em figurinhas (stickers) para o WhatsApp.
 
 ## 📌 Contexto e Motivação
 
-Este projeto originou-se de uma necessidade pessoal recorrente: a demanda por otimizar o fluxo de compartilhamento de conteúdos audiovisuais do TikTok diretamente para conversas do WhatsApp no formato de figurinhas. Diante da fricção imposta por múltiplos aplicativos intermediários de conversão e edição, concebeu-se esta ferramenta com o propósito de mitigar tal atrito, unificando o processo de aquisição, processamento de imagem/vídeo e disparo automatizado em uma única interface coesa e eficiente.
+Este projeto originou-se de uma necessidade pessoal recorrente: a demanda por otimizar o fluxo de compartilhamento de conteúdos do TikTok diretamente para conversas do WhatsApp no formato de figurinhas. Diante disso, esta ferramenta foi desenvolvida com o propósito de mitigar tal atrito, unificando o processo de aquisição, processamento de imagem/vídeo e disparo automatizado em uma única interface coesa e eficiente.
 
 ## 🛠️ Tecnologias e Dependências Utilizadas
 
