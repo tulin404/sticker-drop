@@ -30,33 +30,25 @@ O ecossistema do projeto é construído sobre as seguintes tecnologias e pacotes
 ## 📂 Estrutura do Projeto
 
 ```text
-tiktok-sticker-bot/  {
-            "id": "76959965136473    6",
-            "type": "photo",
-"url": "https://p19-comment-sign-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610&x-signature=Hoif5jtrXwGZsohDZJs5xYPpDNM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-        },├── src
-/  {    "i   "7695996513647313716",
-"type": "photo",
-"url": "https://p19-comment-sign-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610800&x-signature=Hoif5jtrXwGZsohDZJs5xYPpDNM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-  ,│   │   └── whatsapp
-.ts     # Instanciação e eventos do WhatsApp Web  {
-            "id": "7695996513647313716",    "type": "photo",
-            "url": "https://p19-comment-s-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610800&x-signature=Hoif5jtrXwGZsohDZJs5xYPM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-        },│   │   └── sticker.contr
-oller.ts  {    "id": "7695996513647313716",
-   "e": "photo",
-            l": "https://p19-comment-sign-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610800&x-signature=Hoif5jtrXwGZsohDZJs5xYPpDNM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-        },   │   └── sticker.
-route.ts  {    "id": "7695996513647313716",
-            "e": "photo",
-            l": "https://p19-comment-sign-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610800&x-signature=Hoif5jtrXwGZsohDZJs5xYPpDNM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-        },   │   ├── tiktok.ser
-vice.ts
-│   │   └── whatsapp.service.ts  {
-            "id": "76959965136473    6",
-            "type": "photo",
-"url": "https://p19-comment-sign-sg.tiktokcdn.com/tos-alisg-i-zt8igodiya-sg/2d414b9c04474cd891504830443328c4~tplv-jj85edgx6n-image-origin.jpeg?dr=8569&refresh_token=0c750800&x-expires=1794610&x-signature=Hoif5jtrXwGZsohDZJs5xYPpDNM%3D&t=67a6c45e&ps=a0626fcd&shp=ff37627b&shcp=ff37627b&idc=my"
-        },  `
+tiktok-sticker-bot/
+├── public/                 # Interface estática do cliente web
+│   └── index.html          # UI principal para interações rápidas
+├── src/
+│   ├── config/             # Configurações globais e de clientes externos
+│   │   └── whatsapp.ts     # Instanciação e eventos do WhatsApp Web
+│   ├── controllers/        # Controladores de lógica de negócio e requisições
+│   │   └── sticker.controller.ts
+│   ├── routes/             # Roteador de endpoints da API
+│   │   └── sticker.route.ts
+│   ├── services/           # Camada de serviços (Download e Manipulação)
+│   │   ├── tiktok.service.ts
+│   │   └── whatsapp.service.ts
+│   ├── app.ts              # Configuração e middlewares da instância do Express
+│   └── server.ts           # Inicialização do servidor HTTP e portas
+├── .env                    # Variáveis de ambiente locais
+├── package.json            # Metadados e dependências do projeto
+└── tsconfig.json           # Configurações do compilador TypeScript
+```
 
 ## 🚀 Como Executar o Projeto
 
