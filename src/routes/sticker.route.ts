@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { sendStickerController } from "../controllers/sticker.controller";
+import { StickerController } from "../controllers/sticker.controller";
 
 export const stickerRouter = Router();
 
-stickerRouter.post("/send", sendStickerController);
+stickerRouter.post("/generate", StickerController.generate);
+stickerRouter.post("/send", StickerController.send);
