@@ -17,8 +17,8 @@ export class StickerController {
             const stickers = await getTikTokStickers(videoUrl);
 
             return res.status(200).json({
+                message: "Stickers gerados com sucesso.",
                 stickers,
-                message: "Stickers gerados com sucesso."
             });
         } catch (error) {
             console.error(`Erro ao gerar figurinhas: ${error}`);
