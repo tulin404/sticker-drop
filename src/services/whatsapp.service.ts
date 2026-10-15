@@ -16,7 +16,9 @@ export async function sendSticker({
 
     const chatId = `${number.replace(/\D/g, "")}@c.us`;
 
-    const media = await MessageMedia.fromUrl(imgUrl);
+    const media = await MessageMedia.fromUrl(imgUrl, {
+        unsafeMime: true,
+    });
 
     await client.sendMessage(chatId, media, {
         sendMediaAsSticker: true,
