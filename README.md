@@ -21,6 +21,7 @@ O ecossistema do projeto é construído sobre as seguintes tecnologias e pacotes
 * [**Puppeteer**](https://pptr.dev/) — Biblioteca para controle do navegador headless (subjacente ao `whatsapp-web.js`).
 * [**Axios**](https://axios-http.com/) — Cliente HTTP baseado em promessas para requisições a APIs externas e obtenção de mídias.
 * [**qrcode-terminal**](https://www.npmjs.com/package/qrcode-terminal) — Utilitário para renderização do QR Code de autenticação diretamente na interface do terminal.
+* [**sharp**](https://www.npmjs.com/package/sharp?activeTab=readme) — Processamento de imagens em alta performance.
 
 ### Utilitários e Desenvolvimento
 * [**dotenv**](https://www.npmjs.com/package/dotenv) — Gerenciamento de variáveis de ambiente.
