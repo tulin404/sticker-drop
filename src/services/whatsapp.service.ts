@@ -1,7 +1,6 @@
 import whatsapp from "whatsapp-web.js";
-import axios from "axios";
 import { client, isWhatsAppReady } from "../config/whatsapp";
-import sharp from "sharp";
+import { Sticker, StickerTypes } from "wa-sticker-formatter";
 
 const { MessageMedia } = whatsapp;
 
@@ -18,26 +17,22 @@ export async function sendSticker({
 
     const chatId = `${number.replace(/\D/g, "")}@c.us`;
 
-    const response = await axios.get(imgUrl, { responseType: "arraybuffer" });
-    const imageBuffer = Buffer.from(response.data);
+    const sticker = new Sticker(imgUrl, {
+        pack: "TikTok Sticker",
+        author: "sticker-dropper",
+        type: StickerTypes.DEFAULT,
+        quality: 65,
+    });
 
-    const optimizedWebpBuffer = await sharp(imageBuffer)
-        .resize(512, 512, {
-            fit: "contain",
-            background: { r: 0, g: 0, b: 0, alpha: 0 },
-        })
-        .webp({ quality: 75 })
-        .toBuffer();
+    const buffer = await sticker.toBuffer();
 
     const media = new MessageMedia(
         "image/webp",
-        optimizedWebpBuffer.toString("base64"),
+        buffer.toString("base64"),
         "sticker.webp",
     );
 
     await client.sendMessage(chatId, media, {
         sendMediaAsSticker: true,
-        stickerName: "TikTok Sticker",
-        stickerAuthor: "tiktok-sticker-bot",
     });
 };
